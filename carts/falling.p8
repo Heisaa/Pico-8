@@ -5,11 +5,10 @@ __lua__
 --my library
 function round(num)
  if num-flr(num)<0.5 then
-  numr=flr(num)
+  return flr(num)
  else
-  numr=ceil(num)
+  return ceil(num)
  end
- return numr
 end
 
 function maprange(x,a,b,c,d)
