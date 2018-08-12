@@ -1,7 +1,6 @@
 pico-8 cartridge // http://www.pico-8.com
 version 15
 __lua__
-
 --my library
 function round(num)
  if num-flr(num)<0.5 then
@@ -17,17 +16,23 @@ function maprange(x,a,b,c,d)
 end
 --end of my library
 
---dots={{10,10},{10,50},{50,50},{50,10},{30,5}}
-
+--variables
+dots={}
+timer=0
+cavemax=35 --change this to change cavesize
+cavemin=cavemax-30 
 
 function makedots()
  dots={}
- amount=round(rnd(10))+6
- for i=1, amount do
-  add(dots,{a})--sine wave to make the dots into a cicle
+ amount=round(rnd(5))+6
+ for i=0,1-1/amount,1/amount do
+  --add(dots,{rnd(25)+(sin(i)*40+54),rnd(25)+cos(i)*40+54})--sine wave to make the dots into a "cicle"
+  add(dots,{
+      sin(i)*(rnd(cavemax-cavemin)+cavemin)+64,
+      cos(i)*(rnd(cavemax-cavemin)+cavemin)+64
+      })
  end
- print("hej",64,64,7)
- return dots
+ --return dots
 end
 
 function cave(arr)
@@ -41,19 +46,34 @@ function cave(arr)
  end
 end
 
+function growcave()
+ for i=1,#dots do
+  dots[i][1]*=sin(maprange(i,1,#dots,0,1-1/amount))*0.1+64
+  dots[i][2]*=cos(maprange(i,1,#dots,0,1-1/amount))*0.1+64
+ end
+end
+
 --game loop
 function _init()
  cls()
+ makedots()
 end
 
 function _update()
- 
+ --[[if timer==15 then
+  makedots()
+  timer=0
+  end
+ timer+=1]]
+ growcave()
 end
 
 function _draw()
  cls()
+ cave(dots)
+
+ --debug
  print("mem:"..stat(0),3,113,7)
  print("cpu:"..stat(2),3,121,7)
- cave(makedots())
 end
 
