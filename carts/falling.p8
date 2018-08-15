@@ -21,8 +21,10 @@ timer=0
 cavemax=8 --change this to change cavesize
 cavemin=cavemax-4
 cavecol=0
-cavespawn=12
-cavespeed=1.06
+cavespawn=30
+cavespeed=1.04
+cavex=64
+cavey=64
 alldots={}
 
 function makedots()
@@ -30,8 +32,8 @@ function makedots()
  amount=round(rnd(5))+6
  for i=0,1-1/amount,1/amount do
   add(dots,{
-      sin(i)*(rnd(cavemax-cavemin)+cavemin)+64,
-      cos(i)*(rnd(cavemax-cavemin)+cavemin)+64
+      sin(i)*(rnd(cavemax-cavemin)+cavemin)+cavex,
+      cos(i)*(rnd(cavemax-cavemin)+cavemin)+cavey
       })
  end
  --save the dots in an array
@@ -55,8 +57,8 @@ end
 function growcave(arr)
  local checkamount=0
  for i=1,#arr do
-  arr[i][1]=sin(checkamount)*((arr[i][1]-64)/sin(checkamount))*cavespeed+64 --calculating the random cavesize and grow it
-  arr[i][2]=cos(checkamount)*((arr[i][2]-64)/cos(checkamount))*cavespeed+64
+  arr[i][1]=sin(checkamount)*((arr[i][1]-cavex)/sin(checkamount))*cavespeed+cavex --calculating the random cavesize and grow it
+  arr[i][2]=cos(checkamount)*((arr[i][2]-cavey)/cos(checkamount))*cavespeed+cavey
   checkamount+=1/#arr
  end
 end
@@ -159,9 +161,19 @@ function _update()
   timer=0
   end
  timer+=1
- for i=1,#alldots do
+ for i=1,#alldots-1 do
   growcave(alldots[i])
  end
+ if btn(1) then
+  cavex+=1
+ elseif btn(0) then
+  cavex-=1
+ elseif btn(3) then
+  cavey+=1
+ elseif btn(2) then
+  cavey-=1
+ end
+
 end
 
 function _draw()
