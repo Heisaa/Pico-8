@@ -45,7 +45,13 @@ function makedots()
  end
 end
 
-function cave(arr)
+function opening()
+ openingdots=alldots[#alldots]
+ 
+ return openingdots
+end
+
+function drawpoly(arr)
  --draw the cave from coordinats
  for i=1,#arr do
   if i==#arr then
@@ -59,7 +65,7 @@ end
 function growcave(arr)
  local checkamount=0
  for i=1,#arr do
-  --calculating the random cavesize and grow it
+  --calculating the random cavesize and grow it, probably could be remade
   arr[i][1]=sin(checkamount)*((arr[i][1]-cavex)/sin(checkamount))*cavespeed+cavex 
   arr[i][2]=cos(checkamount)*((arr[i][2]-cavey)/cos(checkamount))*cavespeed+cavey
   checkamount+=1/#arr
@@ -149,22 +155,23 @@ function render_poly(v,col)
   pset(sx2,y,c)
  end 
 end
-
 --end testing
 
 --game loop
 function _init()
  cls(bgcol)
  makedots()
+ opening()
 end
 
 function _update()
  if timer==cavespawn then
   makedots()
+  opening()
   timer=0
-  end
+ end
  timer+=1
- for i=1,#alldots-1 do
+ for i=1,#alldots do
   growcave(alldots[i])
  end
  if btn(1) then
@@ -182,14 +189,15 @@ end
 function _draw()
  cls(bgcol)
  
+ render_poly(extractv(openingdots,0))
+ 
  for i=1,#alldots do
-  cave(alldots[i])
+  drawpoly(alldots[i])
  end
- render_poly(extractv(alldots[#alldots]),0)
  
  
  --debug
- --print("alldots:"..#alldots,3,100,7)
+ print("openingdots:"..openingdots[1][1],3,100,7)
  print("mem:"..round(stat(0)).."kib",3,113,7)
  print("cpu:"..round(stat(2)*100).."%",3,121,7)
 end
