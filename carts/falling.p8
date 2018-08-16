@@ -16,7 +16,7 @@ function maprange(x,a,b,c,d)
 end
 --end of my library
 
---variables
+--global variables
 timer=0
 cavemax=8 --change this to change cavesize
 cavemin=cavemax-4
@@ -26,6 +26,8 @@ cavespeed=1.04
 cavex=64
 cavey=64
 alldots={}
+
+bgcol=5
 
 function makedots()
  dots={}
@@ -57,7 +59,8 @@ end
 function growcave(arr)
  local checkamount=0
  for i=1,#arr do
-  arr[i][1]=sin(checkamount)*((arr[i][1]-cavex)/sin(checkamount))*cavespeed+cavex --calculating the random cavesize and grow it
+  --calculating the random cavesize and grow it
+  arr[i][1]=sin(checkamount)*((arr[i][1]-cavex)/sin(checkamount))*cavespeed+cavex 
   arr[i][2]=cos(checkamount)*((arr[i][2]-cavey)/cos(checkamount))*cavespeed+cavey
   checkamount+=1/#arr
  end
@@ -151,7 +154,7 @@ end
 
 --game loop
 function _init()
- cls()
+ cls(bgcol)
  makedots()
 end
 
@@ -177,7 +180,7 @@ function _update()
 end
 
 function _draw()
- cls(5)
+ cls(bgcol)
  
  for i=1,#alldots do
   cave(alldots[i])
