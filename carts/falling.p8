@@ -47,7 +47,6 @@ end
 
 function opening()
  openingdots=alldots[#alldots]
- 
  return openingdots
 end
 
@@ -83,7 +82,7 @@ function extractv(arr)
 end
 
 function render_poly(v,col)
- col=col or 5
+ col=col or 12
 
  -- initialize scan extents
  -- with ludicrous values
@@ -167,10 +166,11 @@ end
 function _update()
  if timer==cavespawn then
   makedots()
-  opening()
+  --opening()
   timer=0
  end
  timer+=1
+
  for i=1,#alldots do
   growcave(alldots[i])
  end
@@ -189,15 +189,14 @@ end
 function _draw()
  cls(bgcol)
  
- render_poly(extractv(openingdots,0))
- 
+ render_poly(extractv(openingdots,11))
+
  for i=1,#alldots do
   drawpoly(alldots[i])
  end
  
- 
  --debug
- print("openingdots:"..openingdots[1][1],3,100,7)
+ print("openingdots:"..openingdots[1][2],3,100,7)
  print("mem:"..round(stat(0)).."kib",3,113,7)
  print("cpu:"..round(stat(2)*100).."%",3,121,7)
 end
