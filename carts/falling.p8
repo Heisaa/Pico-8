@@ -47,7 +47,7 @@ end
 
 function opening()
  openingdots=alldots[#alldots]
- return openingdots
+ --return openingdots
 end
 
 function drawpoly(arr)
@@ -174,6 +174,7 @@ function _update()
  for i=1,#alldots do
   growcave(alldots[i])
  end
+ --move opening
  if btn(1) then
   cavex+=1
  elseif btn(0) then
