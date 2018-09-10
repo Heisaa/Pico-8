@@ -45,11 +45,6 @@ function makedots()
  end
 end
 
-function opening()
- openingdots=alldots[#alldots]
- --return openingdots
-end
-
 function drawpoly(arr)
  --draw the cave from coordinats
  for i=1,#arr do
@@ -160,18 +155,16 @@ end
 function _init()
  cls(bgcol)
  makedots()
- opening()
 end
 
 function _update()
  if timer==cavespawn then
   makedots()
-  --opening()
   timer=0
  end
  timer+=1
 
- for i=1,#alldots do
+ for i=1,#alldots-1 do
   growcave(alldots[i])
  end
  --move opening
@@ -190,14 +183,13 @@ end
 function _draw()
  cls(bgcol)
  
- render_poly(extractv(openingdots,11))
+ render_poly(extractv(alldots[#alldots],11))
 
  for i=1,#alldots do
   drawpoly(alldots[i])
  end
  
  --debug
- print("openingdots:"..openingdots[1][2],3,100,7)
  print("mem:"..round(stat(0)).."kib",3,113,7)
  print("cpu:"..round(stat(2)*100).."%",3,121,7)
 end
