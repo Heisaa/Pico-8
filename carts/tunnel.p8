@@ -10,7 +10,7 @@ c=1
 m=0
 
 function _init()
-	cls()
+ cls()
  for g=1,10 do
   for i=0,1-1/amount,1/amount do
   
