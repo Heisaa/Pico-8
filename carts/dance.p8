@@ -1,0 +1,140 @@
+pico-8 cartridge // http://www.pico-8.com
+version 16
+__lua__
+--dance
+sprnum=1
+stimer=1
+bgcol=0
+stagecol=6
+people=30
+dancers={}
+beat=false
+lcol=rnd(16)
+
+--functions--
+function timer(steps)
+	stimer+=1
+	if stimer>steps then
+ 		stimer=1
+ 		return true
+ 	end
+end
+
+function rndrange(a,b)
+	return rnd(b-a)+a
+end
+
+function chance(perc)
+	return (flr(rnd(100))+1)<=perc
+end
+
+--game loop--
+function _init()
+	cls(bgcol)
+	music(0)
+	--create the dancers
+	for i=1,people do
+		local c1=flr(rnd(16))
+		local c2=flr(rnd(16))
+		while c1==stagecol or c2==stagecol do
+			c1=flr(rnd(16))
+			c2=flr(rnd(16))
+		end
+		add(dancers,{x=rndrange(10,117),
+					y=30+(i*40/people),
+					turned=false,
+					sprnr=1,
+					col1=c1,
+					col2=c2})
+	end
+end
+
+function _update()
+	--animation
+	if timer(8) then
+ 		beat=true
+		--lights
+		lcol=rnd(16)
+ 	end
+
+	for i=1,people do
+		--animation
+		if beat then
+			dancers[i].sprnr+=1
+			if dancers[i].sprnr>2 then
+				dancers[i].sprnr=1
+			end
+			if chance(3) then 
+				dancers[i].sprnr=3
+			end
+		end
+		--sideways
+		if chance(70) then
+			dancers[i].x+=rndrange(-0.5,0.5)
+		end
+		--turn around
+		if chance(3) then
+			if dancers[i].turned==false then
+				dancers[i].turned=true
+			else
+				dancers[i].turned=false
+			end
+		end
+		--arm up
+		if chance(2) then
+			sprnum=3
+		end
+	end
+	--deactivate beat last
+	beat=false
+end
+
+function _draw()
+	cls(bgcol)
+	--draw stage
+	rectfill(0,31,127,90,stagecol)
+	--lights
+	for i=1,50 do
+		line(0,0,10+i,30,lcol+i*0.2)
+		line(127,0,117-i,30,lcol+i*0.2)
+	end
+	--draw dancers
+	for i=1,people do
+		pal(9,dancers[i].col1)
+		pal(12,dancers[i].col2)
+		spr(dancers[i].sprnr,dancers[i].x,dancers[i].y,1,1,dancers[i].turned)
+		pal()
+	end
+	--dj-set
+	--[[circfill(30,125,30,1)
+	circ(30,125,28,6)
+	circ(30,125,20,6)
+	circ(30,125,12,6)
+	circfill(30,125,7,8)
+	pset(30,125,0)
+	circfill(97,125,30,1)
+	circ(97,125,28,6)
+	circ(97,125,20,6)
+	circ(97,125,12,6)
+	circfill(97,125,7,8)
+	pset(97,125,0)]]
+	--info
+	print("cpu:"..flr(stat(1)*100).."%",1,120,7)
+	--curser
+
+end
+__gfx__
+00000000000550000000000005055000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000550000005500005055050000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700005990000005500000599500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000005990000059900000099000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000005990000059900000099000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000cc000005cc000000cc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000cc000000cc000000cc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000cc000000cc000000cc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+__sfx__
+011000200c043000000e000000000c0431300400000230000c04323000356000c0000c0432300020000200000c043000001c0001c0000c0431c00000000230000c0430000000000230000c043230000000000000
+011000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+__music__
+03 00424344
+
